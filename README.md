@@ -1,5 +1,4 @@
 # Oebs-iac
-Infastructure as Code for oebs-tjenester
+oebs-tjenester for å opprette topics på GCP Aiven
 
 ## Kafka topics
-Se [kafka](kafka/README.md) folder
