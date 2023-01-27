@@ -1,5 +1,5 @@
-# Melosys-iac
-Infastructure as Code for Melosys-tjenester
+# Oebs-iac
+Infastructure as Code for oebs-tjenester
 
 ## Kafka topics
 Se [kafka](kafka/README.md) folder
