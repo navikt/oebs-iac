@@ -12,9 +12,6 @@ spec:
      {{key}}: {{value}}
   {{/each}}
   acl:
-    - team: teammelosys
-      application: {{app_name_melosys}}
-      access: read
     - team: team-oebs
       application: {{app_name_oebs}}
-      access: write
+      access: readwrite
