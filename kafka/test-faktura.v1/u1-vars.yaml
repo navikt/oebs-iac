@@ -1,5 +1,5 @@
 pool: nav-dev
-name: faktura-status.v1-u1
+name: oebs-u1
 config:
   cleanupPolicy: delete
   minimumInSyncReplicas: 1
@@ -7,5 +7,4 @@ config:
   replication: 2
   retentionBytes: -1
   retentionHours: 168 # 1 Uke
-app_name_melosys: faktureringskomponenten-q2
 app_name_oebs: oebs-melosys-api-u1
