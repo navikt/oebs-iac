@@ -1,0 +1,10 @@
+apiVersion: aiven.nais.io/v1
+kind: AivenApplication
+metadata:
+  name: oebs-dev
+  namespace: team-oebs
+spec:
+  kafka:
+    pool: nav-dev
+  secretName: kafka-oebs-secret-dev-gcp
+  protected: true

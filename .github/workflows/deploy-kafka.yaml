@@ -6,6 +6,7 @@ on:
     paths:
       - kafka/**
       - .github/workflows/deploy-kafka.yaml
+      - '!kafka/README.md'
 jobs:
   setup-matrix:
     runs-on: ubuntu-latest
