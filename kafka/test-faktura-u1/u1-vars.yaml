@@ -1,0 +1,10 @@
+pool: nav-dev
+name: test-faktura-u1.v1
+config:
+  cleanupPolicy: delete
+  minimumInSyncReplicas: 1
+  partitions: 1
+  replication: 2
+  retentionBytes: -1
+  retentionHours: 168 # 1 Uke
+app_name_oebs: oebs-melosys-api-u1
