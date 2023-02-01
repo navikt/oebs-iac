@@ -1,11 +1,10 @@
-apiVersion: nais.io/v1alpha1
-kind: Application
+apiVersion: aiven.nais.io/v1
+kind: AivenApplication
 metadata:
-  name: aiven-app
+  name: oebs-dev
   namespace: team-oebs
-  labels:
-    team: team-oebs
 spec:
-  image: {{ image }}
-  #image: ghcr.io/navikt/myapplication:417dcaa2c839b9da72e0189e2cfdd4e90e9cc6fd
-  #       ^--- interpolated from the ${{ env.docker_image }} variable in the action
+  kafka:
+    pool: nav-dev
+  secretName: kafka-oebs-secret-dev-gcp
+  protected: true
