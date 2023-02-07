@@ -17,7 +17,10 @@ spec:
       access: read
     - team: team-oebs
       application: {{app_name_oebs}}
-      access: write
+      access: readwrite
     - team: teammelosys
       application: {{app_name_kafka_manager}}
       access: read
+    - team: team-oebs
+      application: {{app_name_kafka_manager_oebs}}
+      access: readwrite

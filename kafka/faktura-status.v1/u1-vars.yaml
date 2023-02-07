@@ -10,3 +10,4 @@ config:
 app_name_melosys: faktureringskomponenten-q2
 app_name_oebs: oebs-melosys-api-u1
 app_name_kafka_manager: teammelosys-kafka-manager-q2
+app_name_kafka_manager_oebs: team-oebs-kafka-manager-u1
