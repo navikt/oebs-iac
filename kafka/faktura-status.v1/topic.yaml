@@ -14,7 +14,10 @@ spec:
   acl:
     - team: teammelosys
       application: {{app_name_melosys}}
-      access: readwrite
+      access: read
     - team: team-oebs
       application: {{app_name_oebs}}
       access: write
+    - team: teammelosys
+      application: {{app_name_kafka_manager}}
+      access: read
