@@ -17,3 +17,4 @@ spec:
       access: readwrite
     - team: team-oebs
       application: {{app_name_kafka_manager_oebs}}
+      access: readwrite
