@@ -8,4 +8,3 @@ config:
   retentionBytes: -1
   retentionHours: 168
 app_name_oebs: oebs-melosys-api-q1
-app_name_kafka_manager_oebs: team-oebs-kafka-manager-q1
