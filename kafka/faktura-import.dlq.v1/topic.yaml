@@ -1,0 +1,20 @@
+apiVersion: nais.io/v1alpha1
+kind: Topic
+metadata:
+  name: {{name}}
+  namespace: team-oebs
+  labels:
+    team: team-oebs
+spec:
+  kafka:
+    pool: {{pool}}
+    config:
+      {{#each config as |value key|}}
+        {{key}}: {{value}}
+      {{/each}}
+    acl:
+      - team: team-oebs
+        application: {{app_name_oebs}}
+        access: readwrite
+      - team: team-oebs
+        application: {{app_name_kafka_manager_oebs}}
