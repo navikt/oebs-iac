@@ -1,4 +1,4 @@
-apiVersion: nais.io/v1alpha1
+apiVersion: kafka.nais.io/v1
 kind: Topic
 metadata:
   name: {{name}}
