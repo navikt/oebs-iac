@@ -9,3 +9,5 @@ config:
   retentionHours: 168 # 1 Uke
 app_name_melosys: faktureringskomponenten-q1
 app_name_oebs: oebs-melosys-api-q1
+app_name_kafka_manager: teammelosys-kafka-manager-q1
+app_name_kafka_manager_oebs: team-oebs-kafka-manager-11
