@@ -7,7 +7,7 @@ config:
   replication: 2
   retentionBytes: -1
   retentionHours: 168 #1 Uke
-app_name_melosys: faktureringskomponenten-q2
+app_name_melosys: faktureringskomponenten-q1
 app_name_oebs: oebs-melosys-api-t1
-app_name_kafka_manager: teammelosys-kafka-manager-q2
+app_name_kafka_manager: teammelosys-kafka-manager-q1
 app_name_kafka_manager_oebs: team-oebs-kafka-manager-t1
