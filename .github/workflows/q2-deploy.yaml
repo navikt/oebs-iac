@@ -1,7 +1,7 @@
 name: Deploy-q2
 
 on:
-  workflow_dispatch: {}  
+  workflow_dispatch: {}
 
 jobs:
   setup-matrix:
@@ -39,35 +39,11 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-      - name: deploy to u1
+      - name: deploy to q2
         uses: nais/deploy/actions/deploy@v1
         env:
           APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: dev-gcp
           RESOURCE: kafka/${{ matrix.topic }}/topic.yaml
-          VARS: kafka/${{ matrix.topic }}/u1-vars.yaml
-          PRINT_PAYLOAD: true
-      - name: deploy to q1
-        uses: nais/deploy/actions/deploy@v1
-        env:
-          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
-          CLUSTER: dev-gcp
-          RESOURCE: kafka/${{ matrix.topic }}/topic.yaml
-          VARS: kafka/${{ matrix.topic }}/q1-vars.yaml
-          PRINT_PAYLOAD: true
-      - name: deploy to t1
-        uses: nais/deploy/actions/deploy@v1
-        env:
-          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
-          CLUSTER: dev-gcp
-          RESOURCE: kafka/${{ matrix.topic }}/topic.yaml
-          VARS: kafka/${{ matrix.topic }}/t1-vars.yaml
-          PRINT_PAYLOAD: true
-      - name: deploy to prod
-        uses: nais/deploy/actions/deploy@v1
-        env:
-          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
-          CLUSTER: prod-gcp
-          RESOURCE: kafka/${{ matrix.topic }}/topic-prod.yaml
-          VARS: kafka/${{ matrix.topic }}/prod-vars.yaml
+          VARS: kafka/${{ matrix.topic }}/q2-vars.yaml
           PRINT_PAYLOAD: true
