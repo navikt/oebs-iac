@@ -1,12 +1,7 @@
 name: Deploy-q2
 
 on:
-  workflow_dispatch: {}
-  push:
-    branches: [main]
-    paths:
-      - 'kafka/**/*q2*'
-      - '.github/workflows/q2-deploy.yaml'
+  workflow_dispatch: {}  
 
 jobs:
   setup-matrix:
@@ -16,39 +11,24 @@ jobs:
       emptyMatrix: ${{ steps.set-matrix.outputs.emptyMatrix }}
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v2
         with:
           fetch-depth: 0
 
       - id: set-matrix
-        shell: bash
         run: |
-          BEFORE_SHA="${{ github.event.before }}"
-          CURRENT_SHA="${{ github.sha }}"
-
-          # Fallback if before is empty (e.g., first commit, manual run, etc.)
-          if [[ -z "$BEFORE_SHA" || "$BEFORE_SHA" == "0000000000000000000000000000000000000000" ]]; then
-            echo "No previous commit found — using HEAD~1"
-            BEFORE_SHA=$(git rev-parse HEAD~1 || echo "")
-          fi
-
-          echo "Diffing from $BEFORE_SHA to $CURRENT_SHA"
-
-          MATRIX=$(git diff-tree --diff-filter=d --no-commit-id --name-only -r "$BEFORE_SHA" "$CURRENT_SHA" \
-            | grep '^kafka/' | grep -v 'README.md' | cut -d '/' -f 2 | sort -u | paste -d',' -s)
-
-          echo "Matrix is: $MATRIX"
-
-          if [[ -z "${MATRIX// }" ]]; then
-            echo "emptyMatrix=true" >> "$GITHUB_OUTPUT"
-            echo "matrix=[]" >> "$GITHUB_OUTPUT"
+          MATRIX=$(git diff-tree --diff-filter=d --no-commit-id --name-only -r ${{ github.event.before }} ${{ github.sha }} | grep kafka/ | grep -v README.md | cut -d '/' -f 2 | sort -u | paste -d',' -s )
+          echo Matrix is $MATRIX
+          if [[  -z "${MATRIX// }" ]]; then
+            echo "Empty matrix"
+            echo "::set-output name=emptyMatrix::true"
+            echo "::set-output name=matrix::[]"
           else
-            JSON=$(jq -c -n --arg v "$MATRIX" '{"topic": ($v|split(","))}')
-            echo "matrix=$JSON" >> "$GITHUB_OUTPUT"
-            echo "emptyMatrix=false" >> "$GITHUB_OUTPUT"
+            JSON=$(jq -c -n --arg v $MATRIX '{"topic": $v|split(",")}')
+            echo "matrix: $JSON"
+            echo "::set-output name=matrix::$JSON"
+            echo "::set-output name=emptyMatrix::false"
           fi
-
-
   deploy:
     needs: setup-matrix
     runs-on: ubuntu-latest
@@ -58,13 +38,36 @@ jobs:
       matrix: ${{ fromJson(needs.setup-matrix.outputs.matrix) }}
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: deploy to q2
+        uses: actions/checkout@v2
+      - name: deploy to u1
         uses: nais/deploy/actions/deploy@v1
         env:
           APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: dev-gcp
           RESOURCE: kafka/${{ matrix.topic }}/topic.yaml
-          VARS: kafka/${{ matrix.topic }}/q2-vars.yaml
+          VARS: kafka/${{ matrix.topic }}/u1-vars.yaml
+          PRINT_PAYLOAD: true
+      - name: deploy to q1
+        uses: nais/deploy/actions/deploy@v1
+        env:
+          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
+          CLUSTER: dev-gcp
+          RESOURCE: kafka/${{ matrix.topic }}/topic.yaml
+          VARS: kafka/${{ matrix.topic }}/q1-vars.yaml
+          PRINT_PAYLOAD: true
+      - name: deploy to t1
+        uses: nais/deploy/actions/deploy@v1
+        env:
+          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
+          CLUSTER: dev-gcp
+          RESOURCE: kafka/${{ matrix.topic }}/topic.yaml
+          VARS: kafka/${{ matrix.topic }}/t1-vars.yaml
+          PRINT_PAYLOAD: true
+      - name: deploy to prod
+        uses: nais/deploy/actions/deploy@v1
+        env:
+          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
+          CLUSTER: prod-gcp
+          RESOURCE: kafka/${{ matrix.topic }}/topic-prod.yaml
+          VARS: kafka/${{ matrix.topic }}/prod-vars.yaml
           PRINT_PAYLOAD: true
