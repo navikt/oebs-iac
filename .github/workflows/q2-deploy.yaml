@@ -11,24 +11,32 @@ jobs:
       emptyMatrix: ${{ steps.set-matrix.outputs.emptyMatrix }}
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
+        uses: actions/checkout@v4
 
       - id: set-matrix
+        shell: bash
         run: |
-          MATRIX=$(git diff-tree --diff-filter=d --no-commit-id --name-only -r ${{ github.event.before }} ${{ github.sha }} | grep kafka/ | grep -v README.md | cut -d '/' -f 2 | sort -u | paste -d',' -s )
-          echo Matrix is $MATRIX
-          if [[  -z "${MATRIX// }" ]]; then
-            echo "Empty matrix"
-            echo "::set-output name=emptyMatrix::true"
-            echo "::set-output name=matrix::[]"
-          else
-            JSON=$(jq -c -n --arg v $MATRIX '{"topic": $v|split(",")}')
-            echo "matrix: $JSON"
-            echo "::set-output name=matrix::$JSON"
-            echo "::set-output name=emptyMatrix::false"
+          set -euo pipefail
+
+          echo "Scanning for kafka/*/q2-vars.yaml files..."
+          # Find topics that actually have q2-vars.yaml present
+          mapfile -t TOPICS < <(find kafka -mindepth 2 -maxdepth 2 -type f -name "q2-vars.yaml" -printf "%h\n" \
+            | awk -F'/' '{print $2}' | sort -u)
+
+          if [[ ${#TOPICS[@]} -eq 0 ]]; then
+            echo "No kafka topics contain q2-vars.yaml"
+            echo "emptyMatrix=true" >> "$GITHUB_OUTPUT"
+            echo "matrix=[]" >> "$GITHUB_OUTPUT"
+            exit 0
           fi
+
+          csv=$(IFS=,; echo "${TOPICS[*]}")
+          json=$(jq -c -n --arg v "$csv" '{"topic": ($v|split(","))}')
+
+          echo "Found topics with q2-vars.yaml: $csv"
+          echo "matrix=$json" >> "$GITHUB_OUTPUT"
+          echo "emptyMatrix=false" >> "$GITHUB_OUTPUT"
+
   deploy:
     needs: setup-matrix
     runs-on: ubuntu-latest
@@ -38,8 +46,9 @@ jobs:
       matrix: ${{ fromJson(needs.setup-matrix.outputs.matrix) }}
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
-      - name: deploy to q2
+        uses: actions/checkout@v4
+
+      - name: Deploy to q2
         uses: nais/deploy/actions/deploy@v1
         env:
           APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
