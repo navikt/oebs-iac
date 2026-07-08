@@ -29,7 +29,7 @@ jobs:
       emptyMatrix: ${{ steps.set-matrix.outputs.emptyMatrix }}
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
@@ -60,7 +60,7 @@ jobs:
       matrix: ${{ fromJson(needs.setup-matrix.outputs.matrix) }}
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
       - name: deploy to u1
         uses: nais/deploy/actions/deploy@v2
         env:
