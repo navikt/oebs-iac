@@ -1,0 +1,5 @@
+pool: nav-dev
+#todo: Skal man ha med u1 og t1? Må sette opp noe som gjør at de blir forskjellig?
+name: ordre-oebs-u1.v1
+app_name_oebs: ordre-processor-oebs-u1
+app_name_kafka_manager_oebs: team-oebs-kafka-manager-u1
