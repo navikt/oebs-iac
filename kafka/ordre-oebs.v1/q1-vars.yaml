@@ -1,4 +1,0 @@
-pool: nav-dev
-name: ordre-oebs-q1.v1
-app_name_oebs: ordre-processor-oebs-q1
-app_name_kafka_manager_oebs: team-oebs-kafka-manager-q1
