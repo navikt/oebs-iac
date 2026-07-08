@@ -64,7 +64,6 @@ jobs:
       - name: deploy to u1
         uses: nais/deploy/actions/deploy@v2
         env:
-          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: dev-gcp
           RESOURCE: kafka/${{ matrix.topic }}/topic.yaml
           VARS: kafka/${{ matrix.topic }}/u1-vars.yaml
@@ -72,7 +71,6 @@ jobs:
       - name: deploy to q1
         uses: nais/deploy/actions/deploy@v2
         env:
-          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: dev-gcp
           RESOURCE: kafka/${{ matrix.topic }}/topic.yaml
           VARS: kafka/${{ matrix.topic }}/q1-vars.yaml
@@ -80,7 +78,6 @@ jobs:
       - name: deploy to t1
         uses: nais/deploy/actions/deploy@v2
         env:
-          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: dev-gcp
           RESOURCE: kafka/${{ matrix.topic }}/topic.yaml
           VARS: kafka/${{ matrix.topic }}/t1-vars.yaml
@@ -88,7 +85,6 @@ jobs:
       - name: deploy to prod
         uses: nais/deploy/actions/deploy@v2
         env:
-          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: prod-gcp
           RESOURCE: kafka/${{ matrix.topic }}/topic-prod.yaml
           VARS: kafka/${{ matrix.topic }}/prod-vars.yaml
