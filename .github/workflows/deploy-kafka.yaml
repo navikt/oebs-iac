@@ -7,6 +7,15 @@ on:
       - kafka/**
       - .github/workflows/deploy-kafka.yaml
       - '!kafka/README.md'
+  workflow_dispatch:
+    inputs:
+      topics:
+        description: >
+          Comma-separated list of topics to deploy.
+          Available: faktura-import.dlq.v1, faktura-status.v1,
+          melosys-q2-faktura.v1, melosys-q2-status.v1, ordre-oebs.v1, test-faktura.v1
+        required: true
+        type: string
 
 permissions:
   contents: read
@@ -26,7 +35,11 @@ jobs:
 
       - id: set-matrix
         run: |
-          MATRIX=$(git diff-tree --diff-filter=d --no-commit-id --name-only -r ${{ github.event.before }} ${{ github.sha }} | grep kafka/ | grep -v README.md | cut -d '/' -f 2 | sort -u | paste -d',' -s )
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            MATRIX="${{ github.event.inputs.topics }}"
+          else
+            MATRIX=$(git diff-tree --diff-filter=d --no-commit-id --name-only -r ${{ github.event.before }} ${{ github.sha }} | grep kafka/ | grep -v README.md | cut -d '/' -f 2 | sort -u | paste -d',' -s)
+          fi
           echo Matrix is $MATRIX
           if [[  -z "${MATRIX// }" ]]; then
             echo "Empty matrix"
@@ -65,7 +78,7 @@ jobs:
           VARS: kafka/${{ matrix.topic }}/q1-vars.yaml
           PRINT_PAYLOAD: true
       - name: deploy to t1
-        uses: nais/deploy/actions/deploy@v1
+        uses: nais/deploy/actions/deploy@v2
         env:
           APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: dev-gcp
