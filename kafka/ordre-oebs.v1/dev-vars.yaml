@@ -1,0 +1,5 @@
+pool: nav-dev
+name: ordre-oebs.v1
+app_name_oebs: ordre-processor-oebs
+app_name_kafka_manager_oebs: team-oebs-kafka-manager
+app_read_access: ordre-processor-oebs-read
