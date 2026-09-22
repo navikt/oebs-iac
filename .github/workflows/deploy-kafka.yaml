@@ -61,7 +61,18 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
+      - name: Check which vars exist
+        id: check
+        run: |
+          for env in u1 q1 t1 prod; do
+            if [[ -f "kafka/${{ matrix.topic }}/${env}-vars.yaml" ]]; then
+              echo "${env}=true" >> $GITHUB_OUTPUT
+            else
+              echo "${env}=false" >> $GITHUB_OUTPUT
+            fi
+          done
       - name: deploy to u1
+        if: steps.check.outputs.u1 == 'true'
         uses: nais/deploy/actions/deploy@v2
         env:
           CLUSTER: dev-gcp
@@ -69,6 +80,7 @@ jobs:
           VARS: kafka/${{ matrix.topic }}/u1-vars.yaml
           PRINT_PAYLOAD: true
       - name: deploy to q1
+        if: steps.check.outputs.q1 == 'true'
         uses: nais/deploy/actions/deploy@v2
         env:
           CLUSTER: dev-gcp
@@ -76,6 +88,7 @@ jobs:
           VARS: kafka/${{ matrix.topic }}/q1-vars.yaml
           PRINT_PAYLOAD: true
       - name: deploy to t1
+        if: steps.check.outputs.t1 == 'true'
         uses: nais/deploy/actions/deploy@v2
         env:
           CLUSTER: dev-gcp
@@ -83,6 +96,7 @@ jobs:
           VARS: kafka/${{ matrix.topic }}/t1-vars.yaml
           PRINT_PAYLOAD: true
       - name: deploy to prod
+        if: steps.check.outputs.prod == 'true'
         uses: nais/deploy/actions/deploy@v2
         env:
           CLUSTER: prod-gcp
