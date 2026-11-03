@@ -8,3 +8,4 @@ config:
   retentionBytes: -1
   retentionHours: 10
 app_name_oebs: personhendelse-consumer-dependabot
+app_read_access: ordre-processor-oebs-dependabot
