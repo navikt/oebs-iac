@@ -15,3 +15,8 @@ spec:
     - team: team-oebs
       application: {{app_name_oebs}}
       access: read
+    {{#if app_read_access}}
+    - team: team-oebs
+      application: {{app_read_access}}
+      access: read
+    {{/if}}
