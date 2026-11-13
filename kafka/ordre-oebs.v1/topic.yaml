@@ -23,4 +23,4 @@ spec:
       access: readwrite
     - team: teamdigihot
       application: hm-oebs-sink
-      access: write
+      access: readwrite
