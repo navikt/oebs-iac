@@ -21,3 +21,6 @@ spec:
     - team: team-oebs
       application: {{app_name_kafka_manager_oebs}}
       access: readwrite
+    - team: teamdigihot
+      application: hm-oebs-sink
+      access: write
